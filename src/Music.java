@@ -5,6 +5,7 @@ public class Music {
     private Integer volume;
     private Integer BPM;
     private Integer instrument;
+    private String octave;
 
     public static String generateMusicString(Integer volume, Integer BPM, Integer instrument) {
         //Pega os atributos das devidas textbox da GUI e gera uma music string
@@ -19,3 +20,4 @@ public class Music {
         musicString = generateMusicString(volume, BPM, instrument);
     }
 }
+
