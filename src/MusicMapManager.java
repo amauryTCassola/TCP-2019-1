@@ -5,6 +5,7 @@ public class MusicMapManager {
 	private Hashtable<String, String> musicMap = new Hashtable<String, String>();
 	
 	public MusicMapManager(Music music){
+		
 		// Default notes
 		musicMap.put("A",simpleNote('A', music));
 		musicMap.put("B",simpleNote('B', music));
@@ -22,43 +23,93 @@ public class MusicMapManager {
 		musicMap.put("e",repeatNote(music));
 		musicMap.put("f",repeatNote(music));
 		musicMap.put("g",repeatNote(music));
+		
+		musicMap.put(" ", doublesVolume(music));
+		
+		musicMap.put("!", changeInstrumentToHarpsichord(music));
+		
+		musicMap.put("O", turnUpVolumeTenPerCent(music));
+		musicMap.put("o", turnUpVolumeTenPerCent(music));
+		musicMap.put("I", turnUpVolumeTenPerCent(music));
+		musicMap.put("i", turnUpVolumeTenPerCent(music));
+		musicMap.put("U", turnUpVolumeTenPerCent(music));
+		musicMap.put("u", turnUpVolumeTenPerCent(music));
+		
+		// TODO the rest of the mapping
+		
+		musicMap.put("!", changeInstrumentToHarpsichord(music));
+		
+	}
+	
+
+	private String turnUpVolumeTenPerCent(Music music) {
+		Integer volume = music.getVolume();
+		Integer newVolume = integerValueForNewVolume(volume);
+		newVolume = ifTooBigGetMaxVolume(newVolume);
+		music.setVolume(newVolume);
+		return String.format(":Controller(7, %d)", newVolume);
+	}
+
+
+	private int integerValueForNewVolume(Integer volume) {
+		return (int) Math.round(volume * 1.1);
+	}
+
+
+	private String changeInstrumentToHarpsichord(Music music) {
+		music.setInstrument(6);
+		return "I6";
+	}
+
+
+	private String doublesVolume(Music music) {
+		Integer volume = music.getVolume();
+		Integer newDoubledVolume = volume * 2;
+		newDoubledVolume = ifTooBigGetMaxVolume(newDoubledVolume);
+		music.setVolume(newDoubledVolume);
+		return String.format(":Controller(7, %d)", newDoubledVolume);
 	}
 	
 	
-
-	public Hashtable<String, String> getMusicMap() {
-		return musicMap;
+	private Integer ifTooBigGetMaxVolume(Integer volume) {
+		if (volume > Constants.MAX_VOLUME)
+			return Constants.MAX_VOLUME;
+		else return volume;
 	}
 
 
-	private static String simpleNote(Character charTexto, Music music) {
+	private static String simpleNote(Character note, Music music) {
 		String octave = music.getOctave();
-		return charTexto + octave;
+		return note + octave;
 	}
 	
-	private String repeatNote(Music music) {
+	
+	private static String repeatNote(Music music) {
 		String musicString = music.getMusicString();
-		// TODO: understand and implement this shit
-		return null;
+		// TODO: ask professor if a repeat any notes or only A notes
+		return "";
 	}
 	
 
 	public boolean loadMap() {
-        return false; //default return action
+		// TODO: implement this thing - we really want it?
+        return false;
     }
 
     public boolean saveMap() {
-        return false; //default return action
+    	// TODO: implement this thing - we really want it?
+    	return false;
     }
 
-    private boolean hasKey() {
-        return false;  //default return action
+    public boolean hasKey(String key) {
+        return musicMap.containsKey(key);
     }
     
-    private String keyValue() {
-    	return "";
+    public String keyValue(String key) {
+    	return musicMap.get(key);
     }
     
-    
-    
+    public Hashtable<String, String> getMusicMap() {
+		return musicMap;
+	}
 }

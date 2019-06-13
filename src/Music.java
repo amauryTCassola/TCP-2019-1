@@ -21,21 +21,46 @@ public class Music {
     }
 
     public String getMusicString() {
-        return musicString;
+        return this.musicString;
     }
 
     public void setMusicString() {
-        musicString = generateMusicString(volume, BPM, instrument);
+        this.musicString = generateMusicString(volume, BPM, instrument);
     }
-
+    
+    public Integer getVolume() {
+		return this.volume;
+	}
+	
+	public void setVolume(Integer newVolume) {
+		this.volume = newVolume;
+	}
+    
+	public Integer getBPM() {
+		return this.BPM;
+	}
+	
+	public void setBPM(Integer newBPM) {
+		this.BPM = newBPM;
+	}
+	
+	public Integer getInstrument() {
+		return this.instrument;
+	}
+	
+	public void setInstrument(Integer newInstrument) {
+		this.instrument = newInstrument;
+	}    
+    
 	public String getOctave() {
-		return octave;
+		return this.octave;
 	}
 
 	public void setOctave(String octave) {
 		this.octave = octave;
 	}
-    
+
+	
     
     
 }
