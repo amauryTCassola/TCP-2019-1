@@ -2,92 +2,108 @@ import java.util.Hashtable;
 
 
 public class MusicMapManager {
-	private Hashtable<String, String> musicMap = new Hashtable<String, String>();
+	private Hashtable<String, MusicCommand> musicMap = new Hashtable<String, MusicCommand>();
 	
-	public MusicMapManager(Music music){
+	public MusicMapManager(){
 		
 		// Default notes
-		musicMap.put("A",simpleNote('A', music));
-		musicMap.put("B",simpleNote('B', music));
-		musicMap.put("C",simpleNote('C', music));
-		musicMap.put("D",simpleNote('D', music));
-		musicMap.put("E",simpleNote('E', music));
-		musicMap.put("F",simpleNote('F', music));
-		musicMap.put("G",simpleNote('G', music));
+		musicMap.put("A", new SimpleNote('A'));
+		musicMap.put("B",new SimpleNote('B'));
+		musicMap.put("C",new SimpleNote('C'));
+		musicMap.put("D",new SimpleNote('D'));
+		musicMap.put("E",new SimpleNote('E'));
+		musicMap.put("F",new SimpleNote('F'));
+		musicMap.put("G",new SimpleNote('G'));
 		
 		// Note repeat / Pause
-		musicMap.put("a",repeatNote(music));
+		/*
+		 * TODO: IMPLEMENT THIS REPEAT NOTE CLASS
+		 * musicMap.put("a",repeatNote(music));
 		musicMap.put("b",repeatNote(music));
 		musicMap.put("c",repeatNote(music));
 		musicMap.put("d",repeatNote(music));
 		musicMap.put("e",repeatNote(music));
 		musicMap.put("f",repeatNote(music));
-		musicMap.put("g",repeatNote(music));
+		musicMap.put("g",repeatNote(music));*/
 		
-		musicMap.put(" ", doublesVolume(music));
+		musicMap.put(" ", new DoublesVolume());
 		
-		musicMap.put("!", changeInstrumentToHarpsichord(music));
+		musicMap.put("!", new ChangeInstrumentToHarpsichord());
 		
-		musicMap.put("O", turnUpVolumeTenPerCent(music));
-		musicMap.put("o", turnUpVolumeTenPerCent(music));
-		musicMap.put("I", turnUpVolumeTenPerCent(music));
-		musicMap.put("i", turnUpVolumeTenPerCent(music));
-		musicMap.put("U", turnUpVolumeTenPerCent(music));
-		musicMap.put("u", turnUpVolumeTenPerCent(music));
+		musicMap.put("O", new TurnUpVolumeTenPerCent());
+		musicMap.put("o", new TurnUpVolumeTenPerCent());
+		musicMap.put("I", new TurnUpVolumeTenPerCent());
+		musicMap.put("i", new TurnUpVolumeTenPerCent());
+		musicMap.put("U", new TurnUpVolumeTenPerCent());
+		musicMap.put("u", new TurnUpVolumeTenPerCent());
 		
 		// TODO the rest of the mapping
 		
-		musicMap.put("!", changeInstrumentToHarpsichord(music));
 		
 	}
 	
-
-	private String turnUpVolumeTenPerCent(Music music) {
-		Integer volume = music.getVolume();
-		Integer newVolume = integerValueForNewVolume(volume);
-		newVolume = ifTooBigGetMaxVolume(newVolume);
-		music.setVolume(newVolume);
-		return String.format(":Controller(7, %d)", newVolume);
+	
+	interface MusicCommand { 
+	    String command(Music music);
+	} 
+	
+	
+	class SimpleNote implements MusicCommand {
+		private char note;
+		
+		public SimpleNote(char note){
+			this.note = note;
+		}	
+		public String command(Music music) {
+			String octave = music.getOctave();
+			return this.note + octave;
+		}
 	}
+
+	
+	class DoublesVolume implements MusicCommand {
+		
+		public String command(Music music) {
+			Integer volume = music.getVolume();
+			Integer newDoubledVolume = volume * 2;
+			newDoubledVolume = ifTooBigGetMaxVolume(newDoubledVolume);
+			music.setVolume(newDoubledVolume);
+			return String.format(":Controller(7, %d)", newDoubledVolume);
+		}
+	}
+	
+	
+	class ChangeInstrumentToHarpsichord implements MusicCommand {
+		
+		public String command(Music music) {
+			music.setInstrument(6);
+			return "I6";
+		}
+	}
+	
+	
+	class TurnUpVolumeTenPerCent implements MusicCommand {
+		
+		public String command(Music music) {
+			Integer volume = music.getVolume();
+			Integer newVolume = integerValueForNewVolume(volume);
+			newVolume = ifTooBigGetMaxVolume(newVolume);
+			music.setVolume(newVolume);
+			return String.format(":Controller(7, %d)", newVolume);
+		}
+	}
+	
 
 
 	private int integerValueForNewVolume(Integer volume) {
 		return (int) Math.round(volume * 1.1);
 	}
 
-
-	private String changeInstrumentToHarpsichord(Music music) {
-		music.setInstrument(6);
-		return "I6";
-	}
-
-
-	private String doublesVolume(Music music) {
-		Integer volume = music.getVolume();
-		Integer newDoubledVolume = volume * 2;
-		newDoubledVolume = ifTooBigGetMaxVolume(newDoubledVolume);
-		music.setVolume(newDoubledVolume);
-		return String.format(":Controller(7, %d)", newDoubledVolume);
-	}
-	
 	
 	private Integer ifTooBigGetMaxVolume(Integer volume) {
 		if (volume > Constants.MAX_VOLUME)
 			return Constants.MAX_VOLUME;
 		else return volume;
-	}
-
-
-	private static String simpleNote(Character note, Music music) {
-		String octave = music.getOctave();
-		return note + octave;
-	}
-	
-	
-	private static String repeatNote(Music music) {
-		String musicString = music.getMusicString();
-		// TODO: ask professor if a repeat any notes or only A notes
-		return "";
 	}
 	
 
@@ -105,11 +121,11 @@ public class MusicMapManager {
         return musicMap.containsKey(key);
     }
     
-    public String keyValue(String key) {
-    	return musicMap.get(key);
+    public String keyValue(String key, Music music) {
+    	return musicMap.get(key).command(music);
     }
     
-    public Hashtable<String, String> getMusicMap() {
+    public Hashtable<String, MusicCommand> getMusicMap() {
 		return musicMap;
 	}
 }

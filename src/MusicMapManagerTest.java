@@ -16,22 +16,21 @@ public class MusicMapManagerTest {
 	
 	Music music = new Music(Constants.VOLUME_DEFAULT, Constants.BPM_DEFAULT, 
 			Constants.INSTRUMENT_DEFAULT, Constants.OCTAVE_DEFAULT);
-	MusicMapManager map = new MusicMapManager(music);
+	MusicMapManager map = new MusicMapManager();
 	
 	
 	@Test
 	public void keyValueSimpleNoteTest() {
-		System.out.println(music.getVolume());
-		//assertEquals("B5", map.keyValue("B"));
-		//assertNotEquals("A5", map.keyValue("a"));
-		System.out.println(music.getVolume());
+		assertEquals("B5", map.keyValue("B", music));
+		music.setOctave("6");
+		assertEquals("C6", map.keyValue("C", music));
 	}
 	
 	@Test
 	public void keyValueDoubleVolumeTest() {
-		//assertEquals(40, music.getVolume().intValue());
-		//assertEquals(":Controller(7, 80)", map.keyValue(" "));
-		//assertEquals(80, music.getVolume().intValue());
+		assertEquals(40, music.getVolume().intValue());
+		assertEquals(":Controller(7, 80)", map.keyValue(" ", music));
+		assertEquals(80, music.getVolume().intValue());
 	}
 	
 
