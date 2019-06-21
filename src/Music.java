@@ -1,7 +1,6 @@
 public class Music {
 
     private String musicString = "";
-    private String lastMusicCommand = " ";
     
     private Integer volume;
     private Integer BPM;
@@ -70,15 +69,6 @@ public class Music {
 	public void setOctave(String octave) {
 		this.octave = octave;
 	}
-
-	public String getLastMusicCommand() {
-		return lastMusicCommand;
-	}
-
-//	public void setLastMusicCommand(String lastMusicCommand) {
-//		this.lastMusicCommand = lastMusicCommand;
-//	}
-
 	
     
     

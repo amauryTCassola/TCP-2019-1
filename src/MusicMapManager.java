@@ -4,7 +4,7 @@ import java.util.List;
 
 public class MusicMapManager {
 	private Hashtable<String, MusicCommand> musicMap = new Hashtable<String, MusicCommand>();
-	private String lastMusicCommand = " ";
+	private String lastMusicCommand = "";
 	
 	public MusicMapManager(){
 		
@@ -30,6 +30,9 @@ public class MusicMapManager {
 		musicMap.put(" ", new DoublesVolume());
 		
 		musicMap.put("!", new ChangeInstrumentToHarpsichord());
+		musicMap.put("\n", new ChangeInstrumentToTubularBells());
+		musicMap.put(";", new ChangeInstrumentToPanFlute());
+		musicMap.put(",", new ChangeInstrumentToChurchOrgan());
 		
 		musicMap.put("O", new TurnUpVolumeTenPerCent());
 		musicMap.put("o", new TurnUpVolumeTenPerCent());
@@ -102,6 +105,33 @@ public class MusicMapManager {
 		}
 	}
 	
+	
+	class ChangeInstrumentToTubularBells implements MusicCommand {
+		
+		public String command(Music music) {
+			music.setInstrument(14);
+			return "I14";
+		}
+	}
+	
+	
+	class ChangeInstrumentToPanFlute implements MusicCommand {
+		
+		public String command(Music music) {
+			music.setInstrument(75);
+			return "I75";
+		}
+	}
+	
+	
+	class ChangeInstrumentToChurchOrgan implements MusicCommand {
+		
+		public String command(Music music) {
+			music.setInstrument(19);
+			return "I19";
+		}
+	}
+
 	
 	class TurnUpVolumeTenPerCent implements MusicCommand {
 		

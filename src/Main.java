@@ -23,14 +23,15 @@ public class Main {
 		MusicMapManager musicMap = new MusicMapManager();
 		Parser parser = new Parser(musicMap, music);
 		
-		String inputText = "Aachaiajkia";
+		String inputText = "Aachaia,jki;a\n";
 		//String inputText = "Aaaa";
 		int maxCharLength = 3;
 		
 		System.out.println("initial music string:"+music.getMusicString());
 		parser.iteratesThroughString(inputText, maxCharLength);
 		System.out.println("\nfinal music string:\n"+music.getMusicString());
-
+		System.out.println("final instrument:"+music.getInstrument());
+		System.out.println("final volume:"+music.getVolume());
 		
 		
 	}
