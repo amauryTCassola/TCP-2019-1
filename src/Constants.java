@@ -9,10 +9,17 @@ public class Constants {
 	public static final Integer BPM_DEFAULT = 120;
 	public static final Integer INSTRUMENT_DEFAULT = 0;
 	public static final String OCTAVE_DEFAULT = "5";
+	
 	public static final String MUSIC_PAUSE = "R";
 	public static final List<String> NOTES = (Arrays.asList(
 					"A", "B", "C", "D", "E", "F", "G"
 					));
 	public static final Integer MAX_OCTAVE = 10;
 	public static final Integer MAX_VOLUME = 127;
+	public static final Integer MAX_INSTRUMENT = 127;
+	
+	public static final String ELSE_COMMAND = "else";
+	public static final String DIGIT_COMMAND = "digit";
+	
+	public static final String EMPTY_STRING = "";
 }

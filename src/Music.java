@@ -8,7 +8,6 @@ public class Music {
     private String octave;
     
     
-    // Class constructor
     public Music(Integer volume, Integer BPM, Integer instrument, String octave) {
     	this.volume = volume;
     	this.BPM = BPM;
@@ -30,7 +29,7 @@ public class Music {
     }
     
     public void addToMusicString(String musicPiece) {
-    	if (musicString == "") {
+    	if (musicString == Constants.EMPTY_STRING || musicPiece == Constants.EMPTY_STRING) {
     		this.musicString += musicPiece;
     	}
     	else {

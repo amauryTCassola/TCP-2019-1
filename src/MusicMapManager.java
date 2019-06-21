@@ -5,10 +5,11 @@ import java.util.List;
 public class MusicMapManager {
 	private Hashtable<String, MusicCommand> musicMap = new Hashtable<String, MusicCommand>();
 	private String lastMusicCommand = "";
-	
+	private Character readDigit = '0';
+
+
 	public MusicMapManager(){
 		
-		// Default notes
 		musicMap.put("A", new SimpleNote('A'));
 		musicMap.put("B",new SimpleNote('B'));
 		musicMap.put("C",new SimpleNote('C'));
@@ -17,21 +18,16 @@ public class MusicMapManager {
 		musicMap.put("F",new SimpleNote('F'));
 		musicMap.put("G",new SimpleNote('G'));
 		
-		// Note repeat or Pause
-//		musicMap.put("a", new RepeatNote());
-//		musicMap.put("b", new RepeatNote());
-//		musicMap.put("c", new RepeatNote());
-//		musicMap.put("d", new RepeatNote());
-//		musicMap.put("e", new RepeatNote());
-//		musicMap.put("f", new RepeatNote());
-//		musicMap.put("g", new RepeatNote());
-		musicMap.put("else", new RepeatNote());
+		musicMap.put("else", new RepeaNoteOrPause());
 		
 		
 		musicMap.put("!", new ChangeInstrumentToHarpsichord());
 		musicMap.put("\n", new ChangeInstrumentToTubularBells());
 		musicMap.put(";", new ChangeInstrumentToPanFlute());
 		musicMap.put(",", new ChangeInstrumentToChurchOrgan());
+
+		musicMap.put("digit", new ChangeInstrumentBySum());
+		
 		
 		musicMap.put(" ", new DoublesVolume());
 		
@@ -42,11 +38,8 @@ public class MusicMapManager {
 		musicMap.put("U", new TurnUpVolumeTenPerCent());
 		musicMap.put("u", new TurnUpVolumeTenPerCent());
 		
+		
 		musicMap.put("?", new RaiseOctave());
-		
-		// TODO the rest of the mapping
-		
-		
 	}
 	
 	
@@ -68,7 +61,7 @@ public class MusicMapManager {
 	}
 	
 	
-	class RepeatNote implements MusicCommand {
+	class RepeaNoteOrPause implements MusicCommand {
 		
 		public String command(Music music) {
 			if (isNote(lastMusicCommand)) 
@@ -79,7 +72,6 @@ public class MusicMapManager {
 		}
 
 		private boolean isNote(String lastMusicCommand) {
-			//Character firstCharMusicCommand = lastMusicCommand.charAt(0);
 			if (Constants.NOTES.contains(lastMusicCommand))
 				return true;
 			else
@@ -87,6 +79,7 @@ public class MusicMapManager {
 		}
 	}
 	
+	//TODO: change those string returns to constants
 	
 	class DoublesVolume implements MusicCommand {
 		
@@ -134,6 +127,29 @@ public class MusicMapManager {
 			return "I19";
 		}
 	}
+	
+	
+	class ChangeInstrumentBySum implements MusicCommand {
+		
+		public String command(Music music) {
+			Integer currentInstrument = music.getInstrument();
+			Integer newInstrument = getNewInstrument(currentInstrument);
+			music.setInstrument(newInstrument);
+			String newInstrumentString = "I" + String.valueOf(newInstrument);
+			
+			return newInstrumentString;
+		}
+
+		private Integer getNewInstrument(Integer currentInstrument) {
+			Integer sumDigit = Character.getNumericValue(readDigit);
+			Integer newInstrument = currentInstrument + sumDigit;
+
+			if (newInstrument > Constants.MAX_INSTRUMENT)
+				newInstrument = 0;
+			
+			return newInstrument;
+		}
+	}
 
 	
 	class TurnUpVolumeTenPerCent implements MusicCommand {
@@ -165,7 +181,6 @@ public class MusicMapManager {
 			return Integer.toString(newOctave);
 		}
 	}
-	
 
 
 	private int integerValueForNewVolume(Integer volume) {
@@ -204,5 +219,9 @@ public class MusicMapManager {
     
     public Hashtable<String, MusicCommand> getMusicMap() {
 		return musicMap;
+	}
+    
+	public void setReadDigit(Character readDigit) {
+		this.readDigit = readDigit;
 	}
 }

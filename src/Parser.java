@@ -50,7 +50,14 @@ public class Parser {
     			endSubstring--;
     	}
     	
-    	elseCommand();
+    	Character firstChar = substring.charAt(0);
+    	if (Character.isDigit(firstChar)) {
+    		musicMap.setReadDigit(firstChar);
+    		tryCommand(Constants.DIGIT_COMMAND);
+    		return;
+    	}
+    	
+    	tryCommand(Constants.ELSE_COMMAND);
     }
 
 	private boolean tryCommand(String command) {
@@ -66,9 +73,4 @@ public class Parser {
     		return false;
     }
 	
-	private void elseCommand() {
-		String musicCommand = musicMap.keyValue("else", music);
-		music.addToMusicString(musicCommand);
-		musicMap.setLastMusicCommand("else");		
-	}	
 }

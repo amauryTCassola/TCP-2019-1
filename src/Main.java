@@ -23,9 +23,8 @@ public class Main {
 		MusicMapManager musicMap = new MusicMapManager();
 		Parser parser = new Parser(musicMap, music);
 		
-		String inputText = "Aachaia,jki;a\n??????";
-		//String inputText = "Aaaa";
-		int maxCharLength = 3;
+		String inputText = "Aachaia,jki;a\n?????19";
+		int maxCharLength = 2;
 		
 		System.out.println("initial music string:"+music.getMusicString());
 		parser.iteratesThroughString(inputText, maxCharLength);
