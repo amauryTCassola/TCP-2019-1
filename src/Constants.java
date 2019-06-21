@@ -22,4 +22,6 @@ public class Constants {
 	public static final String DIGIT_COMMAND = "digit";
 	
 	public static final String EMPTY_STRING = "";
+	
+	public static final Integer SUBSTRING_LENGTH = 2;
 }

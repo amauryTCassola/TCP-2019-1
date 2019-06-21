@@ -9,9 +9,8 @@ public class Parser {
 	}
 	
 
-    public String buildMusicString(String inputText) {
-    	// TODO: implement this when needed, in order to couple with the logic
-        return "funcao textToMusic OK";
+    public void buildMusicString(String inputText) {
+    	iteratesThroughString(inputText, Constants.SUBSTRING_LENGTH);
     }
 
     
