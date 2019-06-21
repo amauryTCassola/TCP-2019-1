@@ -24,7 +24,7 @@ public class Parser {
     	
     	for (startSubstring = 0; startSubstring < lastIterableSubstringIndex; startSubstring++){
     		endSubstring = startSubstring + substringLength;
-    		substring = inputText.substring(startSubstring, endSubstring);
+    		substring = inputText.substring(startSubstring, endSubstring); //.substring em java termina com intervalo aberto
     		iteratesThroughSubstring(substring);
 		}
     	
@@ -59,7 +59,7 @@ public class Parser {
     	if (musicMap.hasKey(command)) { 		
     		musicCommand = musicMap.keyValue(command, music);
     		music.addToMusicString(musicCommand);
-    		music.setLastMusicCommand(musicCommand);
+    		musicMap.setLastMusicCommand(command);
     		return true;
     	}
     	else
@@ -69,6 +69,6 @@ public class Parser {
 	private void elseCommand() {
 		String musicCommand = musicMap.keyValue("else", music);
 		music.addToMusicString(musicCommand);
-		music.setLastMusicCommand(musicCommand);		
+		musicMap.setLastMusicCommand("else");		
 	}	
 }

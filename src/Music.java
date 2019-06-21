@@ -75,9 +75,9 @@ public class Music {
 		return lastMusicCommand;
 	}
 
-	public void setLastMusicCommand(String lastMusicCommand) {
-		this.lastMusicCommand = lastMusicCommand;
-	}
+//	public void setLastMusicCommand(String lastMusicCommand) {
+//		this.lastMusicCommand = lastMusicCommand;
+//	}
 
 	
     

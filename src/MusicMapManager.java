@@ -4,6 +4,7 @@ import java.util.List;
 
 public class MusicMapManager {
 	private Hashtable<String, MusicCommand> musicMap = new Hashtable<String, MusicCommand>();
+	private String lastMusicCommand = " ";
 	
 	public MusicMapManager(){
 		
@@ -17,13 +18,13 @@ public class MusicMapManager {
 		musicMap.put("G",new SimpleNote('G'));
 		
 		// Note repeat or Pause
-		musicMap.put("a", new RepeatNote());
-		musicMap.put("b", new RepeatNote());
-		musicMap.put("c", new RepeatNote());
-		musicMap.put("d", new RepeatNote());
-		musicMap.put("e", new RepeatNote());
-		musicMap.put("f", new RepeatNote());
-		musicMap.put("g", new RepeatNote());
+//		musicMap.put("a", new RepeatNote());
+//		musicMap.put("b", new RepeatNote());
+//		musicMap.put("c", new RepeatNote());
+//		musicMap.put("d", new RepeatNote());
+//		musicMap.put("e", new RepeatNote());
+//		musicMap.put("f", new RepeatNote());
+//		musicMap.put("g", new RepeatNote());
 		musicMap.put("else", new RepeatNote());
 		
 		musicMap.put(" ", new DoublesVolume());
@@ -64,16 +65,16 @@ public class MusicMapManager {
 	class RepeatNote implements MusicCommand {
 		
 		public String command(Music music) {
-			if (isNote(music.getLastMusicCommand())) 
-				return music.getLastMusicCommand();
+			if (isNote(lastMusicCommand)) 
+				return lastMusicCommand + music.getOctave();
 			
 			else
 				return Constants.MUSIC_PAUSE;	
 		}
 
 		private boolean isNote(String lastMusicCommand) {
-			Character firstCharMusicCommand = lastMusicCommand.charAt(0);
-			if (Constants.NOTES.contains(firstCharMusicCommand))
+			//Character firstCharMusicCommand = lastMusicCommand.charAt(0);
+			if (Constants.NOTES.contains(lastMusicCommand))
 				return true;
 			else
 				return false;
@@ -144,6 +145,10 @@ public class MusicMapManager {
     public String keyValue(String key, Music music) {
     	return musicMap.get(key).command(music);
     }
+    
+    public void setLastMusicCommand(String lastMusicCommand) {
+		this.lastMusicCommand = lastMusicCommand;
+	}
     
     public Hashtable<String, MusicCommand> getMusicMap() {
 		return musicMap;

@@ -10,8 +10,8 @@ public class Constants {
 	public static final Integer INSTRUMENT_DEFAULT = 0;
 	public static final String OCTAVE_DEFAULT = "5";
 	public static final String MUSIC_PAUSE = "R";
-	public static final List<Character> NOTES = (Arrays.asList(
-					'A', 'B', 'C', 'D', 'E', 'F', 'G'
+	public static final List<String> NOTES = (Arrays.asList(
+					"A", "B", "C", "D", "E", "F", "G"
 					));
 	
 	public static final Integer MAX_VOLUME = 127;
