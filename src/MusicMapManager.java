@@ -1,4 +1,5 @@
 import java.util.Hashtable;
+import java.util.List;
 
 
 public class MusicMapManager {
@@ -15,16 +16,15 @@ public class MusicMapManager {
 		musicMap.put("F",new SimpleNote('F'));
 		musicMap.put("G",new SimpleNote('G'));
 		
-		// Note repeat / Pause
-		/*
-		 * TODO: IMPLEMENT THIS REPEAT NOTE CLASS
-		 * musicMap.put("a",repeatNote(music));
-		musicMap.put("b",repeatNote(music));
-		musicMap.put("c",repeatNote(music));
-		musicMap.put("d",repeatNote(music));
-		musicMap.put("e",repeatNote(music));
-		musicMap.put("f",repeatNote(music));
-		musicMap.put("g",repeatNote(music));*/
+		// Note repeat or Pause
+		musicMap.put("a", new RepeatNote());
+		musicMap.put("b", new RepeatNote());
+		musicMap.put("c", new RepeatNote());
+		musicMap.put("d", new RepeatNote());
+		musicMap.put("e", new RepeatNote());
+		musicMap.put("f", new RepeatNote());
+		musicMap.put("g", new RepeatNote());
+		musicMap.put("else", new RepeatNote());
 		
 		musicMap.put(" ", new DoublesVolume());
 		
@@ -59,7 +59,27 @@ public class MusicMapManager {
 			return this.note + octave;
 		}
 	}
+	
+	
+	class RepeatNote implements MusicCommand {
+		
+		public String command(Music music) {
+			if (isNote(music.getLastMusicCommand())) 
+				return music.getLastMusicCommand();
+			
+			else
+				return Constants.MUSIC_PAUSE;	
+		}
 
+		private boolean isNote(String lastMusicCommand) {
+			Character firstCharMusicCommand = lastMusicCommand.charAt(0);
+			if (Constants.NOTES.contains(firstCharMusicCommand))
+				return true;
+			else
+				return false;
+		}
+	}
+	
 	
 	class DoublesVolume implements MusicCommand {
 		

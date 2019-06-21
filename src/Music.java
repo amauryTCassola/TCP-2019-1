@@ -1,11 +1,13 @@
 public class Music {
 
-    private String musicString;
+    private String musicString = "";
+    private String lastMusicCommand = " ";
     
     private Integer volume;
     private Integer BPM;
     private Integer instrument;
     private String octave;
+    
     
     // Class constructor
     public Music(Integer volume, Integer BPM, Integer instrument, String octave) {
@@ -26,6 +28,15 @@ public class Music {
 
     public void setMusicString() {
         this.musicString = generateMusicString(volume, BPM, instrument);
+    }
+    
+    public void addToMusicString(String musicPiece) {
+    	if (musicString == "") {
+    		this.musicString += musicPiece;
+    	}
+    	else {
+    		this.musicString += " " + musicPiece;
+    	}
     }
     
     public Integer getVolume() {
@@ -58,6 +69,14 @@ public class Music {
 
 	public void setOctave(String octave) {
 		this.octave = octave;
+	}
+
+	public String getLastMusicCommand() {
+		return lastMusicCommand;
+	}
+
+	public void setLastMusicCommand(String lastMusicCommand) {
+		this.lastMusicCommand = lastMusicCommand;
 	}
 
 	
