@@ -13,6 +13,6 @@ public class Constants {
 	public static final List<String> NOTES = (Arrays.asList(
 					"A", "B", "C", "D", "E", "F", "G"
 					));
-	
+	public static final Integer MAX_OCTAVE = 10;
 	public static final Integer MAX_VOLUME = 127;
 }

@@ -27,12 +27,13 @@ public class MusicMapManager {
 //		musicMap.put("g", new RepeatNote());
 		musicMap.put("else", new RepeatNote());
 		
-		musicMap.put(" ", new DoublesVolume());
 		
 		musicMap.put("!", new ChangeInstrumentToHarpsichord());
 		musicMap.put("\n", new ChangeInstrumentToTubularBells());
 		musicMap.put(";", new ChangeInstrumentToPanFlute());
 		musicMap.put(",", new ChangeInstrumentToChurchOrgan());
+		
+		musicMap.put(" ", new DoublesVolume());
 		
 		musicMap.put("O", new TurnUpVolumeTenPerCent());
 		musicMap.put("o", new TurnUpVolumeTenPerCent());
@@ -40,6 +41,8 @@ public class MusicMapManager {
 		musicMap.put("i", new TurnUpVolumeTenPerCent());
 		musicMap.put("U", new TurnUpVolumeTenPerCent());
 		musicMap.put("u", new TurnUpVolumeTenPerCent());
+		
+		musicMap.put("?", new RaiseOctave());
 		
 		// TODO the rest of the mapping
 		
@@ -141,6 +144,25 @@ public class MusicMapManager {
 			newVolume = ifTooBigGetMaxVolume(newVolume);
 			music.setVolume(newVolume);
 			return String.format(":Controller(7, %d)", newVolume);
+		}
+	}
+	
+	class RaiseOctave implements MusicCommand {
+		
+		public String command(Music music) {
+			Integer currentOctave = Integer.valueOf(music.getOctave());
+			String newOctave = raiseOctaveByOne(currentOctave);
+			music.setOctave(newOctave);
+			return "";
+		}
+
+		private String raiseOctaveByOne(Integer currentOctave) {
+			
+			Integer newOctave = currentOctave + 1;
+			if (newOctave > Constants.MAX_OCTAVE)
+				newOctave = Integer.valueOf(Constants.OCTAVE_DEFAULT);	
+			
+			return Integer.toString(newOctave);
 		}
 	}
 	
