@@ -11,6 +11,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.NumberFormatter;
 
+import org.jfugue.midi.MidiFileManager;
+import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
 
 import com.sun.glass.events.MouseEvent;
@@ -44,6 +46,8 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.io.File;
+import java.io.IOException;
 
 
 public class MusifyGUI extends JPanel {
@@ -120,7 +124,7 @@ public class MusifyGUI extends JPanel {
 
 		    @Override
 		    public void actionPerformed(ActionEvent arg0) {
-		    	System.out.print("TESTE MIDI");
+		    	saveMidiFile();
 		    }
 		});
 	}
@@ -276,5 +280,16 @@ public class MusifyGUI extends JPanel {
 		jf.setVisible(true);
 		jf.setJMenuBar(musify.menuBar);
 		jf.getContentPane().add(musify);
+	}
+	
+	private Boolean saveMidiFile() {
+		Pattern savingPattern = new Pattern(music.getMusicString());
+		
+		try {
+			MidiFileManager.savePatternToMidi(savingPattern, new File("Musica Gerada.mid"));
+			return true;
+		} catch (IOException ex) {
+			return false;
+		}
 	}
 }
