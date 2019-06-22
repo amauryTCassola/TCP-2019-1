@@ -1,10 +1,10 @@
 
-
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+import javax.swing.JMenuBar;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
@@ -20,6 +20,8 @@ import java.awt.Color;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 
@@ -29,6 +31,7 @@ import java.awt.event.MouseAdapter;
 import java.text.NumberFormat;
 import java.awt.event.ActionEvent;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.DefaultComboBoxModel;
@@ -64,6 +67,9 @@ public class MusifyGUI extends JPanel {
 	JPanel panelPlayLeft;
 	JPanel panelPlayRight;
 	
+	JMenuBar menuBar;
+	JMenu menu;
+	JMenuItem readTxt, saveMIDI;
 	
 	public MusifyGUI() {
 		
@@ -73,9 +79,7 @@ public class MusifyGUI extends JPanel {
 		this.parser = new Parser(musicMap, music);
 		this.player = new Player();
 		
-		GridLayout layout = new GridLayout(5,1);
-		setLayout(layout);
-		
+		GridLayout layout = new GridLayout(5,2);
 		
 		panelHeader = new JPanel();
 		panelHeader.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -93,12 +97,34 @@ public class MusifyGUI extends JPanel {
 		
 		buildPlayPanel();
 		add(panelPlay);
-		
-
 	}
 
+	public void startMenu() {
+		menuBar = new JMenuBar();
+		menu = new JMenu("Files");
+		readTxt = new JMenuItem("Read string from a .txt file");
+		saveMIDI = new JMenuItem("Save music to a .MIDI file");
+		menu.add(readTxt);
+		menu.add(saveMIDI);
+		menuBar.add(menu);
+		
+		readTxt.addActionListener(new ActionListener() {
 
+		    @Override
+		    public void actionPerformed(ActionEvent arg0) {
+		    	System.out.print("TESTE TXT");
+		    }
+		});
+		
+		saveMIDI.addActionListener(new ActionListener() {
 
+		    @Override
+		    public void actionPerformed(ActionEvent arg0) {
+		    	System.out.print("TESTE MIDI");
+		    }
+		});
+	}
+	
 	private void buildPlayPanel() {
 		panelPlay = new JPanel();
 		
@@ -236,7 +262,7 @@ public class MusifyGUI extends JPanel {
 		
 		MusifyGUI musify = new MusifyGUI();
 		JFrame jf = new JFrame();
-		
+		musify.startMenu();
 		musifyWindowInitializer(musify, jf);
 	}
 
@@ -248,6 +274,7 @@ public class MusifyGUI extends JPanel {
 		jf.setBounds(500, 100, 400, 530);
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		jf.setVisible(true);
+		jf.setJMenuBar(musify.menuBar);
 		jf.getContentPane().add(musify);
 	}
 }
