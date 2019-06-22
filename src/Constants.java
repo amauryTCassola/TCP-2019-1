@@ -24,4 +24,11 @@ public class Constants {
 	public static final String EMPTY_STRING = "";
 	
 	public static final Integer SUBSTRING_LENGTH = 2;
+	
+	public static final String[] INSTRUMENT_LIST = 
+			 {
+					"#0   Piano", 
+					"#1   Something",
+					"#2   Other Something"
+			 };
 }
