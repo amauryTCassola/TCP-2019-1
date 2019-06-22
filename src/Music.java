@@ -15,17 +15,20 @@ public class Music {
     	this.octave = octave;
     }
     
-    public static String generateMusicString(Integer volume, Integer BPM, Integer instrument) {
-    	// Get the attributes of the textbox of the GUI and generates a musicString
-        return "No music string generated"; //default return value
+    public void generateInitialMusicString() {
+    	
+    	String volumeConfigString = ":Controller(7,"+this.volume+")";
+    	String BPMConfigString = "T"+this.BPM;
+    	String instrumentConfigString = "I"+this.instrument;
+        this.musicString = volumeConfigString + " " + BPMConfigString + " " + instrumentConfigString;
     }
 
     public String getMusicString() {
-        return this.musicString;
+        return musicString;
     }
 
-    public void setMusicString() {
-        this.musicString = generateMusicString(volume, BPM, instrument);
+    public void setMusicString(String newMusicString) {
+        this.musicString = newMusicString;
     }
     
     public void addToMusicString(String musicPiece) {
