@@ -1,12 +1,14 @@
 
 
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 import javax.swing.text.NumberFormatter;
 
 import org.jfugue.player.Player;
@@ -19,127 +21,95 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+
 import javax.swing.JToolBar;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.text.NumberFormat;
 import java.awt.event.ActionEvent;
 import javax.swing.JMenuBar;
+import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import java.awt.GridBagLayout;
+import javax.swing.BoxLayout;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import java.awt.GridLayout;
+import java.awt.Insets;
 
 
-public class MusifyGUI {
-
-	public JFrame frame;
-	private JTextArea inputTextBox;
-	private JTextArea musicStringTextBox;
-	private JTextField bpmInputBox;
-	private JSlider volumeSlider;
-	private JComboBox instrumentComboBox;
-	private JButton playButton;
+public class MusifyGUI extends JPanel {
 	
 	private Music music;
 	private Parser parser;
 	private Player player;
 	
+	public JFrame frame;
+	private JTextArea inputTextBox, musicStringTextBox;
+	private JSlider volumeSlider, sliderBPM;
+	private JComboBox instrumentComboBox;
+	private JButton playButton;
 
+	JPanel panelHeader;
+	JPanel panelInput;
+	JPanel panelMusicString;
+	JPanel panelConfigs;
+	
+	JPanel panelPlay;
+	JPanel panelPlayLeft;
+	JPanel panelPlayRight;
+	
+	
+	public MusifyGUI() {
+		
+		MusicMapManager musicMap = new MusicMapManager();
+		this.music = new Music(Constants.VOLUME_DEFAULT, Constants.BPM_DEFAULT, 
+				Constants.INSTRUMENT_DEFAULT, Constants.OCTAVE_DEFAULT);
+		this.parser = new Parser(musicMap, music);
+		this.player = new Player();
+		
+		GridLayout layout = new GridLayout(5,1);
+		setLayout(layout);
+		
+		
+		panelHeader = new JPanel();
+		panelHeader.setBorder(new EmptyBorder(10, 10, 10, 10));
+		//panelHeader.add(inputTextBox);
+		add(panelHeader);
+		
+		buildInputPanel();
+		add(panelInput);
+		
+		buildMusicStringPanel();
+		add(panelMusicString);		
+		
+		buildConfigsPanel();
+		add(panelConfigs);
+		
+		buildPlayPanel();
+		add(panelPlay);
+		
 
-	/**
-	 * Create the application.
-	 */
-	public MusifyGUI(Music music, Parser parser, Player player) {
-		this.music = music;
-		this.parser = parser;
-		this.player = player;
-		initialize();
 	}
-	
-	
-	private void getInitialConfigs() {
-		Integer inputVolume = volumeSlider.getValue();
-		Integer inputBPM = Integer.valueOf(bpmInputBox.getText());
-		Integer inputInstrument = instrumentComboBox.getSelectedIndex();
-		
-		music.setVolume(inputVolume);
-		music.setBPM(inputBPM);
-		music.setInstrument(inputInstrument);
-	}
-	
-	
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 394, 453);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-		
-		JButton generateButton = new JButton("Generate!");
-		generateButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				getInitialConfigs();
-				music.generateInitialMusicString();
-				
-				String inputText = inputTextBox.getText();
-				parser.buildMusicString(inputText);
-				musicStringTextBox.setText(music.getMusicString());
-								
-			}
 
 
-		});
-		generateButton.setBounds(279, 293, 89, 23);
-		frame.getContentPane().add(generateButton);
+
+	private void buildPlayPanel() {
+		panelPlay = new JPanel();
+		
+		GridLayout playPanelLayout = new GridLayout(1,2);
+		panelPlay.setLayout(playPanelLayout);
 		
 		
-		inputTextBox = new JTextArea();
-		inputTextBox.setForeground(new Color(0, 0, 0));
-		inputTextBox.setLineWrap(true);
-		inputTextBox.setBounds(10, 75, 358, 87);
-		frame.getContentPane().add(inputTextBox);
-		
-		musicStringTextBox = new JTextArea();
-		musicStringTextBox.setLineWrap(true);
-		musicStringTextBox.setEditable(false);
-		musicStringTextBox.setBounds(10, 174, 358, 87);
-		frame.getContentPane().add(musicStringTextBox);
-		
-		instrumentComboBox = new JComboBox();
-		instrumentComboBox.setModel(new DefaultComboBoxModel(Constants.INSTRUMENT_LIST));
-		instrumentComboBox.setBounds(10, 294, 154, 20);
-		frame.getContentPane().add(instrumentComboBox);
-		
-		JLabel lblBpm = new JLabel("BPM");
-		lblBpm.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblBpm.setBounds(174, 297, 26, 14);
-		frame.getContentPane().add(lblBpm);
-		
-		NumberFormat format = NumberFormat.getInstance();
-	    NumberFormatter formatter = new NumberFormatter(format);
-	    formatter.setValueClass(Integer.class);
-	    formatter.setMinimum(1);
-	    formatter.setMaximum(220);
-	    formatter.setAllowsInvalid(false);
-		
-		bpmInputBox = new JFormattedTextField(formatter);
-		bpmInputBox.setBounds(204, 294, 65, 20);
-		frame.getContentPane().add(bpmInputBox);
-		bpmInputBox.setColumns(10);
-		
-		volumeSlider = new JSlider();
-		volumeSlider.setMaximum(127);
-		volumeSlider.setBounds(168, 377, 200, 26);
-		frame.getContentPane().add(volumeSlider);
-		
-		JLabel lblVolume = new JLabel("Volume");
-		lblVolume.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblVolume.setBounds(249, 349, 55, 23);
-		frame.getContentPane().add(lblVolume);
-		
+		panelPlayLeft = new JPanel();
+		FlowLayout panelPlayLeftLayout = new FlowLayout(FlowLayout.LEADING);
+		panelPlayLeft.setLayout(panelPlayLeftLayout);
+		panelPlay.add(panelPlayLeft);
 		
 		ImageIcon playImage = new ImageIcon("images/playResized.png");
 		playButton = new JButton(playImage);
@@ -148,10 +118,136 @@ public class MusifyGUI {
 				player.play(music.getMusicString());
 			}
 		});
-		playButton.setBounds(10, 336, 67, 67);
 		playButton.setBorderPainted(false);
-		frame.getContentPane().add(playButton);
+		panelPlayLeft.add(playButton);
 
 		
+		panelPlayRight = new JPanel();
+		FlowLayout panelPlayRightLayout = new FlowLayout(FlowLayout.CENTER);
+		panelPlayRight.setLayout(panelPlayRightLayout);
+		panelPlay.add(panelPlayRight);
+		
+		JLabel lblVolume = new JLabel("Volume");
+		lblVolume.setFont(new Font("Tahoma", Font.BOLD, 15));
+		panelPlayRight.add(lblVolume);
+		
+		
+		volumeSlider = new JSlider();
+		volumeSlider.setMaximum(127);
+		panelPlayRight.add(volumeSlider);
+		
+		
+	}
+
+
+
+	private void buildConfigsPanel() {
+		
+		panelConfigs = new JPanel();
+		
+		GridBagConstraints gridConfig = new GridBagConstraints();
+		GridBagLayout layoutConfig = new GridBagLayout();
+		panelConfigs.setLayout(layoutConfig);
+		
+		
+		instrumentComboBox = new JComboBox();
+		instrumentComboBox.setModel(new DefaultComboBoxModel(Constants.INSTRUMENT_LIST));
+		gridConfig.gridx = 0;
+		gridConfig.gridy = 0;
+		gridConfig.weightx = 0.5;
+		panelConfigs.add(instrumentComboBox, gridConfig);
+		
+		
+		JLabel lblBpm = new JLabel("BPM");
+		lblBpm.setFont(new Font("Tahoma", Font.BOLD, 11));
+		gridConfig.gridx = 1;
+		gridConfig.gridy = 0;
+		gridConfig.anchor = GridBagConstraints.EAST;
+		panelConfigs.add(lblBpm, gridConfig);
+		
+		sliderBPM = new JSlider();
+		sliderBPM.setMaximum(220);
+		sliderBPM.setMinimum(1);
+		gridConfig.gridx = 2;
+		gridConfig.gridy = 0;
+		gridConfig.anchor = GridBagConstraints.WEST;
+		gridConfig.ipadx = 20;
+		panelConfigs.add(sliderBPM, gridConfig);
+		
+		
+		JButton generateButton = new JButton("Generate!");
+		generateButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				getInitialConfigs();
+				
+				music.generateInitialMusicString();
+				
+				String inputText = inputTextBox.getText();
+				parser.buildMusicString(inputText);
+				musicStringTextBox.setText(music.getMusicString());
+								
+			}
+
+			private void getInitialConfigs() {
+				Integer inputVolume = volumeSlider.getValue();
+				Integer inputBPM = sliderBPM.getValue();
+				Integer inputInstrument = instrumentComboBox.getSelectedIndex();
+				
+				music.setVolume(inputVolume);
+				music.setBPM(inputBPM);
+				music.setInstrument(inputInstrument);
+			}
+		});
+		gridConfig.gridx = 3;
+		gridConfig.gridy = 0;
+		gridConfig.weightx = 0.5;
+		panelConfigs.add(generateButton, gridConfig);
+	}
+
+
+
+	private void buildMusicStringPanel() {
+		musicStringTextBox = new JTextArea();
+		musicStringTextBox.setLineWrap(true);
+		musicStringTextBox.setEditable(false);
+		musicStringTextBox.setColumns(32);
+		musicStringTextBox.setRows(5);
+		JScrollPane scrollPaneMusicStringBox = new JScrollPane(musicStringTextBox);
+		panelMusicString = new JPanel();
+		panelMusicString.add(scrollPaneMusicStringBox);
+	}
+
+
+
+	private void buildInputPanel() {
+		inputTextBox = new JTextArea();
+		inputTextBox.setLineWrap(true);
+		inputTextBox.setColumns(32);
+		inputTextBox.setRows(5);
+		JScrollPane scrollPaneInputTextBox = new JScrollPane(inputTextBox);
+		panelInput = new JPanel();
+		panelInput.add(scrollPaneInputTextBox);
+	}
+
+	
+	
+	public static void main(String[] args) {
+		
+		MusifyGUI musify = new MusifyGUI();
+		JFrame jf = new JFrame();
+		
+		musifyWindowInitializer(musify, jf);
+	}
+
+
+	private static void musifyWindowInitializer(MusifyGUI musify, JFrame jf) {
+		jf.setTitle("Musify");
+		ImageIcon programIcon = new ImageIcon("images/icon.png");
+		jf.setIconImage(programIcon.getImage());
+		jf.setBounds(500, 100, 400, 530);
+		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		jf.setVisible(true);
+		jf.getContentPane().add(musify);
 	}
 }
