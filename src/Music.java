@@ -60,8 +60,8 @@ public class Music {
 		return this.instrument;
 	}
 	
-	public void setInstrument(Integer newInstrument) {
-		this.instrument = newInstrument;
+	public void setInstrument(Integer newInstrumentIndex) {
+		this.instrument = Constants.INSTRUMENTS_MAP.get(newInstrumentIndex);
 	}    
     
 	public String getOctave() {
