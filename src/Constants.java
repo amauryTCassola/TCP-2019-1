@@ -1,10 +1,14 @@
 import java.util.List;
+
+import javax.swing.ImageIcon;
+
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.HashMap;
 
 
 public class Constants {
+	
 	
 	// Music default configurations
 	public static final Integer VOLUME_DEFAULT = 40;
@@ -30,10 +34,14 @@ public class Constants {
 	public static final Integer SUBSTRING_LENGTH = 2;
 	
 	public static final Integer PIANO_NUMBER = 0;
+	public static final Integer HARPSICHORD_NUMBER = 6;
+	public static final Integer TUBULAR_BELLS_NUMBER = 14;
+	public static final Integer CHURCH_ORGAN_NUMBER = 19;
 	public static final Integer GUITAR_NUMBER = 24;
 	public static final Integer VIOLIN_NUMBER = 40;
 	public static final Integer TRUMPET_NUMBER = 56;
 	public static final Integer FLUTE_NUMBER = 73;
+	public static final Integer PAN_FLUTE_NUMBER = 75;
 	
 	
 	
@@ -55,11 +63,36 @@ public class Constants {
 		}
 	};
 	
+	
+	public static final String ABOUT_TEXT = "Musify is a program coded by the GitHub users:"
+			+ "<br>@amauryTCassola, @colombelli, @Rafaelfferreira"
+			+ "<br>Its purpose is to generate a music given an inputted text."
+			+ "<br><br>It is very simple and intuitive to use: first, type or load a text into the"
+			+ " first text box; then, chose the inital configs (Instrument, BPM and Volume) and"
+			+ " click on the Generate! button; finally, press play to listen to the generated music"
+			+ " and, if wanted, you can save it using the File menu."
+			+ "<br><br>Have fun!";
+	
+	public static final String FORMATTED_TEXT = 
+			String.format("<html><div align=\"justify\" WIDTH=%d>%s</div></html>", 290, ABOUT_TEXT);
+	
 	public static final int STANDARD_BUTTON_HEIGHT = 65;
 	public static final int STANDARD_BUTTON_WIDTH = 65;
 	public static final int STANDARD_TEXTAREA_COLUMNS_COUNT = 32;
 	public static final int STANDARD_TEXTAREA_ROWS_COUNT = 5;
 	public static final Color COLOR_WHITE = new Color(1.0f, 1.0f, 1.0f);
 	public static final Color COLOR_GRAY = new Color(0.5f, 0.5f, 0.5f);
+	
+	
+	public static final String MUSIC_STRING_SET_VOLUME(Integer volume) {
+		return ":Controller(7,"+volume+")";
+	}
+	public static final String MUSIC_STRING_SET_BPM(Integer bpm) {
+		return "T"+bpm;
+	}
+	public static final String MUSIC_STRING_SET_INSTRUMENT(Integer instrument) {
+		return "I"+instrument;
+	}
+	
 	
 }

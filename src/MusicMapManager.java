@@ -1,6 +1,8 @@
 import java.util.Hashtable;
 import java.util.List;
 
+import com.sun.corba.se.impl.orbutil.closure.Constant;
+
 
 public class MusicMapManager {
 	private Hashtable<String, MusicCommand> musicMap = new Hashtable<String, MusicCommand>();
@@ -79,7 +81,6 @@ public class MusicMapManager {
 		}
 	}
 	
-	//TODO: change those string returns to constants
 	
 	class DoublesVolume implements MusicCommand {
 		
@@ -88,7 +89,7 @@ public class MusicMapManager {
 			Integer newDoubledVolume = volume * 2;
 			newDoubledVolume = ifTooBigGetMaxVolume(newDoubledVolume);
 			music.setVolume(newDoubledVolume);
-			return String.format(":Controller(7, %d)", newDoubledVolume);
+			return Constants.MUSIC_STRING_SET_VOLUME(newDoubledVolume);
 		}
 	}
 	
@@ -96,8 +97,8 @@ public class MusicMapManager {
 	class ChangeInstrumentToHarpsichord implements MusicCommand {
 		
 		public String command(Music music) {
-			music.setInstrument(6);
-			return "I6";
+			music.setInstrument(Constants.HARPSICHORD_NUMBER);
+			return Constants.MUSIC_STRING_SET_INSTRUMENT(Constants.HARPSICHORD_NUMBER);
 		}
 	}
 	
@@ -105,8 +106,8 @@ public class MusicMapManager {
 	class ChangeInstrumentToTubularBells implements MusicCommand {
 		
 		public String command(Music music) {
-			music.setInstrument(14);
-			return "I14";
+			music.setInstrument(Constants.TUBULAR_BELLS_NUMBER);
+			return Constants.MUSIC_STRING_SET_INSTRUMENT(Constants.TUBULAR_BELLS_NUMBER);
 		}
 	}
 	
@@ -114,8 +115,8 @@ public class MusicMapManager {
 	class ChangeInstrumentToPanFlute implements MusicCommand {
 		
 		public String command(Music music) {
-			music.setInstrument(75);
-			return "I75";
+			music.setInstrument(Constants.PAN_FLUTE_NUMBER);
+			return Constants.MUSIC_STRING_SET_INSTRUMENT(Constants.PAN_FLUTE_NUMBER);
 		}
 	}
 	
@@ -123,8 +124,8 @@ public class MusicMapManager {
 	class ChangeInstrumentToChurchOrgan implements MusicCommand {
 		
 		public String command(Music music) {
-			music.setInstrument(19);
-			return "I19";
+			music.setInstrument(Constants.CHURCH_ORGAN_NUMBER);
+			return Constants.MUSIC_STRING_SET_INSTRUMENT(Constants.CHURCH_ORGAN_NUMBER);
 		}
 	}
 	
@@ -135,15 +136,14 @@ public class MusicMapManager {
 			Integer currentInstrument = music.getInstrument();
 			Integer newInstrument = getNewInstrument(currentInstrument);
 			music.setInstrument(newInstrument);
-			String newInstrumentString = "I" + String.valueOf(newInstrument);
 			
-			return newInstrumentString;
+			return Constants.MUSIC_STRING_SET_INSTRUMENT(newInstrument);
 		}
 
 		private Integer getNewInstrument(Integer currentInstrument) {
+			
 			Integer sumDigit = Character.getNumericValue(readDigit);
 			Integer newInstrument = currentInstrument + sumDigit;
-
 			if (newInstrument > Constants.MAX_INSTRUMENT)
 				newInstrument = 0;
 			
@@ -159,7 +159,7 @@ public class MusicMapManager {
 			Integer newVolume = integerValueForNewVolume(volume);
 			newVolume = ifTooBigGetMaxVolume(newVolume);
 			music.setVolume(newVolume);
-			return String.format(":Controller(7, %d)", newVolume);
+			return Constants.MUSIC_STRING_SET_VOLUME(newVolume);
 		}
 	}
 	
@@ -169,7 +169,7 @@ public class MusicMapManager {
 			Integer currentOctave = Integer.valueOf(music.getOctave());
 			String newOctave = raiseOctaveByOne(currentOctave);
 			music.setOctave(newOctave);
-			return "";
+			return Constants.EMPTY_STRING;
 		}
 
 		private String raiseOctaveByOne(Integer currentOctave) {
@@ -193,17 +193,6 @@ public class MusicMapManager {
 			return Constants.MAX_VOLUME;
 		else return volume;
 	}
-	
-
-	public boolean loadMap() {
-		// TODO: implement this thing - we really want it?
-        return false;
-    }
-
-    public boolean saveMap() {
-    	// TODO: implement this thing - we really want it?
-    	return false;
-    }
 
     public boolean hasKey(String key) {
         return musicMap.containsKey(key);

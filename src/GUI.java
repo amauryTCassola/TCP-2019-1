@@ -90,7 +90,7 @@ public class GUI extends JFrame {
 		Pattern savingPattern = new Pattern(music.getMusicString());
 		
 		try {
-			MidiFileManager.savePatternToMidi(savingPattern, new File("Musica Gerada.mid"));
+			MidiFileManager.savePatternToMidi(savingPattern, new File("Generated Music.mid"));
 			return true;
 		} catch (IOException ex) {
 			return false;
@@ -243,9 +243,9 @@ public class GUI extends JFrame {
 		btnGenerate.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				getInitialConfigs();
 				
-				music.generateInitialMusicString();
+				music.generateInitialMusicString(currentVolume, currentBPM, 
+						currentInstrumentIndex);
 				
 				String inputText = textAreaInput.getText();
 				parser.buildMusicString(inputText);
@@ -253,11 +253,6 @@ public class GUI extends JFrame {
 				
 			}
 			
-			private void getInitialConfigs() {	
-				music.setVolume(currentVolume);
-				music.setBPM(currentBPM);
-				music.setInstrument(currentInstrumentIndex);
-			}
 		});
 		btnGenerate.setBounds(275, 288, 89, 33);
 		contentPane.add(btnGenerate);
@@ -277,7 +272,7 @@ public class GUI extends JFrame {
 		comboBoxInstrument.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if(arg0.getStateChange() == ItemEvent.SELECTED) {
-					currentInstrumentIndex = comboBoxInstrument.getSelectedIndex();
+					currentInstrumentIndex = Constants.INSTRUMENTS_MAP.get(comboBoxInstrument.getSelectedIndex());
 				}
 			}
 		});

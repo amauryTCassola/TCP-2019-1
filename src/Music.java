@@ -15,11 +15,15 @@ public class Music {
     	this.octave = octave;
     }
     
-    public void generateInitialMusicString() {
+    public void generateInitialMusicString(Integer volume, Integer bpm, Integer instrument) {
     	
-    	String volumeConfigString = ":Controller(7,"+this.volume+")";
-    	String BPMConfigString = "T"+this.BPM;
-    	String instrumentConfigString = "I"+this.instrument;
+    	setVolume(volume);
+		setBPM(bpm);
+		setInstrument(instrument);
+    	
+    	String volumeConfigString = Constants.MUSIC_STRING_SET_VOLUME(volume);
+    	String BPMConfigString = Constants.MUSIC_STRING_SET_BPM(bpm);
+    	String instrumentConfigString = Constants.MUSIC_STRING_SET_INSTRUMENT(instrument);
         this.musicString = volumeConfigString + " " + BPMConfigString + " " + instrumentConfigString;
     }
 
@@ -61,7 +65,8 @@ public class Music {
 	}
 	
 	public void setInstrument(Integer newInstrumentIndex) {
-		this.instrument = Constants.INSTRUMENTS_MAP.get(newInstrumentIndex);
+		
+		this.instrument = newInstrumentIndex;
 	}    
     
 	public String getOctave() {

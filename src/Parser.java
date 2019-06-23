@@ -23,7 +23,7 @@ public class Parser {
     	
     	for (startSubstring = 0; startSubstring < lastIterableSubstringIndex; startSubstring++){
     		endSubstring = startSubstring + substringLength;
-    		substring = inputText.substring(startSubstring, endSubstring); //.substring em java termina com intervalo aberto
+    		substring = inputText.substring(startSubstring, endSubstring); //.substring in java ends with open interval
     		iteratesThroughSubstring(substring);
 		}
     	
@@ -49,15 +49,26 @@ public class Parser {
     			endSubstring--;
     	}
     	
-    	Character firstChar = substring.charAt(0);
-    	if (Character.isDigit(firstChar)) {
-    		musicMap.setReadDigit(firstChar);
+    	if(firstCharIsDigit(substring)) {
     		tryCommand(Constants.DIGIT_COMMAND);
     		return;
     	}
+    		
+    	else
+    		tryCommand(Constants.ELSE_COMMAND);
     	
-    	tryCommand(Constants.ELSE_COMMAND);
     }
+
+
+	private boolean firstCharIsDigit(String substring) {
+		Character firstChar = substring.charAt(0);
+    	if (Character.isDigit(firstChar)) {
+    		musicMap.setReadDigit(firstChar);
+    		return true;
+    	}
+    	else
+    		return false;
+	}
 
 	private boolean tryCommand(String command) {
     	String musicCommand;

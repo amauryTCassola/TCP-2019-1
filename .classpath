@@ -8,6 +8,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
-	<classpathentry kind="lib" path="C:/Users/Usuario/Desktop/TCP-2019-1/External/jfugue-5.0.9.jar" sourcepath=""/>
+	<classpathentry kind="lib" path="C:/Users/Pichau/Desktop/jfugue-5.0.9.jar" sourcepath=""/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
