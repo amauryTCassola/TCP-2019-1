@@ -32,6 +32,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import java.awt.Button;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.BoxLayout;
@@ -44,9 +45,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.event.ChangeEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -129,7 +134,23 @@ public class GUI extends JFrame {
 		JMenuItem mntmNewMenuItem = new JMenuItem("Read string from .txt");
 		mntmNewMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.print("TESTE TXT");
+				
+				Path filePath;
+				String musicStringTxt; //the content of the fil
+				
+				JFileChooser chooser = new JFileChooser();
+		        FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt");
+		        chooser.setFileFilter(filter);
+		        int returnVal = chooser.showOpenDialog(null);
+		        if(returnVal == JFileChooser.APPROVE_OPTION) {
+		        	filePath = Paths.get(chooser.getSelectedFile().getAbsolutePath());
+		        	try {
+						musicStringTxt = new String(Files.readString(filePath));
+						textAreaInput.setText(musicStringTxt);
+					} catch (IOException e) {
+						return;
+					}
+		        }	        
 			}
 		});
 
