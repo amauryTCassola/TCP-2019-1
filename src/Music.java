@@ -21,9 +21,9 @@ public class Music {
 		setBPM(bpm);
 		setInstrument(instrument);
     	
-    	String volumeConfigString = Constants.MUSIC_STRING_SET_VOLUME(volume);
-    	String BPMConfigString = Constants.MUSIC_STRING_SET_BPM(bpm);
-    	String instrumentConfigString = Constants.MUSIC_STRING_SET_INSTRUMENT(instrument);
+    	String volumeConfigString = MusicMapManager.musicStringForNewVolume(volume);
+    	String BPMConfigString = MusicMapManager.musicStringForNewBPM(bpm);
+    	String instrumentConfigString = MusicMapManager.musicStringForNewInstrument(instrument);
         this.musicString = volumeConfigString + " " + BPMConfigString + " " + instrumentConfigString;
     }
 
@@ -65,7 +65,6 @@ public class Music {
 	}
 	
 	public void setInstrument(Integer newInstrumentIndex) {
-		
 		this.instrument = newInstrumentIndex;
 	}    
     

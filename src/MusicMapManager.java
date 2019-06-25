@@ -1,7 +1,6 @@
 import java.util.Hashtable;
 import java.util.List;
 
-//import com.sun.corba.se.impl.orbutil.closure.Constant;
 
 
 public class MusicMapManager {
@@ -89,7 +88,7 @@ public class MusicMapManager {
 			Integer newDoubledVolume = volume * 2;
 			newDoubledVolume = ifTooBigGetMaxVolume(newDoubledVolume);
 			music.setVolume(newDoubledVolume);
-			return Constants.MUSIC_STRING_SET_VOLUME(newDoubledVolume);
+			return MusicMapManager.musicStringForNewVolume(newDoubledVolume);
 		}
 	}
 	
@@ -98,7 +97,7 @@ public class MusicMapManager {
 		
 		public String command(Music music) {
 			music.setInstrument(Constants.HARPSICHORD_NUMBER);
-			return Constants.MUSIC_STRING_SET_INSTRUMENT(Constants.HARPSICHORD_NUMBER);
+			return MusicMapManager.musicStringForNewInstrument(Constants.HARPSICHORD_NUMBER);
 		}
 	}
 	
@@ -107,7 +106,7 @@ public class MusicMapManager {
 		
 		public String command(Music music) {
 			music.setInstrument(Constants.TUBULAR_BELLS_NUMBER);
-			return Constants.MUSIC_STRING_SET_INSTRUMENT(Constants.TUBULAR_BELLS_NUMBER);
+			return MusicMapManager.musicStringForNewInstrument(Constants.TUBULAR_BELLS_NUMBER);
 		}
 	}
 	
@@ -116,7 +115,7 @@ public class MusicMapManager {
 		
 		public String command(Music music) {
 			music.setInstrument(Constants.PAN_FLUTE_NUMBER);
-			return Constants.MUSIC_STRING_SET_INSTRUMENT(Constants.PAN_FLUTE_NUMBER);
+			return MusicMapManager.musicStringForNewInstrument(Constants.PAN_FLUTE_NUMBER);
 		}
 	}
 	
@@ -125,7 +124,7 @@ public class MusicMapManager {
 		
 		public String command(Music music) {
 			music.setInstrument(Constants.CHURCH_ORGAN_NUMBER);
-			return Constants.MUSIC_STRING_SET_INSTRUMENT(Constants.CHURCH_ORGAN_NUMBER);
+			return MusicMapManager.musicStringForNewInstrument(Constants.CHURCH_ORGAN_NUMBER);
 		}
 	}
 	
@@ -137,7 +136,7 @@ public class MusicMapManager {
 			Integer newInstrument = getNewInstrument(currentInstrument);
 			music.setInstrument(newInstrument);
 			
-			return Constants.MUSIC_STRING_SET_INSTRUMENT(newInstrument);
+			return MusicMapManager.musicStringForNewInstrument(newInstrument);
 		}
 
 		private Integer getNewInstrument(Integer currentInstrument) {
@@ -159,7 +158,7 @@ public class MusicMapManager {
 			Integer newVolume = integerValueForNewVolume(volume);
 			newVolume = ifTooBigGetMaxVolume(newVolume);
 			music.setVolume(newVolume);
-			return Constants.MUSIC_STRING_SET_VOLUME(newVolume);
+			return MusicMapManager.musicStringForNewVolume(newVolume);
 		}
 	}
 	
@@ -212,5 +211,20 @@ public class MusicMapManager {
     
 	public void setReadDigit(Character readDigit) {
 		this.readDigit = readDigit;
+	}
+
+
+	public static final String musicStringForNewInstrument(Integer instrument) {
+		return "I"+instrument;
+	}
+
+
+	public static final String musicStringForNewBPM(Integer bpm) {
+		return "T"+bpm;
+	}
+
+
+	public static final String musicStringForNewVolume(Integer volume) {
+		return ":Controller(7,"+volume+")";
 	}
 }

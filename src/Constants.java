@@ -83,16 +83,4 @@ public class Constants {
 	public static final Color COLOR_WHITE = new Color(1.0f, 1.0f, 1.0f);
 	public static final Color COLOR_GRAY = new Color(0.5f, 0.5f, 0.5f);
 	
-	
-	public static final String MUSIC_STRING_SET_VOLUME(Integer volume) {
-		return ":Controller(7,"+volume+")";
-	}
-	public static final String MUSIC_STRING_SET_BPM(Integer bpm) {
-		return "T"+bpm;
-	}
-	public static final String MUSIC_STRING_SET_INSTRUMENT(Integer instrument) {
-		return "I"+instrument;
-	}
-	
-	
 }

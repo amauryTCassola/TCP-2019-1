@@ -69,6 +69,83 @@ public class GUI extends JFrame {
 	private int currentVolume = Constants.VOLUME_DEFAULT;
 	private int currentBPM = Constants.BPM_DEFAULT;
 	private int currentInstrumentIndex = Constants.INSTRUMENT_DEFAULT;
+	
+	
+	/**
+	 * Application callbacks
+	 */
+
+	private Boolean saveMidiFile() {
+		Pattern savingPattern = new Pattern(music.getMusicString());
+		
+		try {
+			MidiFileManager.savePatternToMidi(savingPattern, new File("Generated Music.mid"));
+			return true;
+		} catch (IOException ex) {
+			return false;
+		}
+	}
+	
+	private void readFromTXT() {
+		Path filePath;
+		String musicStringTxt;
+		
+		JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt");
+        chooser.setFileFilter(filter);
+        int returnVal = chooser.showOpenDialog(null);
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+        	filePath = Paths.get(chooser.getSelectedFile().getAbsolutePath());
+        	try {
+        		musicStringTxt = new String(Files.readAllBytes(filePath));
+				textAreaInput.setText(musicStringTxt);
+			} catch (IOException e) {
+				return;
+			}
+        }
+	}
+	
+	
+	private void generateMusicString(TextArea textAreaOutput) {
+		music.generateInitialMusicString(currentVolume, currentBPM, 
+				currentInstrumentIndex);
+		
+		String inputText = textAreaInput.getText();
+		parser.buildMusicString(inputText);
+		textAreaOutput.setText(music.getMusicString());
+	}
+	
+	private void playResumeClicked(JButton btnPlay) {
+		if(!playThread.isAlive()) {
+			playThread = new Thread(new Runnable() {
+			    public void run() {
+			    	String mString = music.getMusicString(); 
+			    	if(!mString.isEmpty()) {
+			    		player.play(mString);
+			    	}
+			    	btnPlay.setIcon(playButton);
+			    	return;
+			    }
+			});
+			btnPlay.setIcon(stopButton);
+			playThread.start();
+		} else {
+			playThread.stop();
+			player.play("");
+			btnPlay.setIcon(playButton);
+		}
+	}
+	
+	
+	private void initMusify() {
+		MusicMapManager musicMap = new MusicMapManager();
+		this.music = new Music(Constants.VOLUME_DEFAULT, Constants.BPM_DEFAULT, Constants.INSTRUMENT_DEFAULT, Constants.OCTAVE_DEFAULT);
+		this.parser = new Parser(musicMap, this.music);
+		this.player = new Player();
+		this.playThread = new Thread();
+	}
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -85,31 +162,14 @@ public class GUI extends JFrame {
 			}
 		});
 	}
-
-	private Boolean saveMidiFile() {
-		Pattern savingPattern = new Pattern(music.getMusicString());
-		
-		try {
-			MidiFileManager.savePatternToMidi(savingPattern, new File("Generated Music.mid"));
-			return true;
-		} catch (IOException ex) {
-			return false;
-		}
-	}
 	
-	private void InitMusify() {
-		MusicMapManager musicMap = new MusicMapManager();
-		this.music = new Music(Constants.VOLUME_DEFAULT, Constants.BPM_DEFAULT, Constants.INSTRUMENT_DEFAULT, Constants.OCTAVE_DEFAULT);
-		this.parser = new Parser(musicMap, this.music);
-		this.player = new Player();
-		this.playThread = new Thread();
-	}
+	
 	/**
 	 * Create the frame.
 	 */
 	public GUI() {
 		
-		InitMusify();
+		initMusify();
 		
 		setResizable(false);
 		setTitle("Musify");
@@ -134,24 +194,10 @@ public class GUI extends JFrame {
 		JMenuItem mntmNewMenuItem = new JMenuItem("Read string from .txt");
 		mntmNewMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
-				Path filePath;
-				String musicStringTxt; //the content of the fil
-				
-				JFileChooser chooser = new JFileChooser();
-		        FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt");
-		        chooser.setFileFilter(filter);
-		        int returnVal = chooser.showOpenDialog(null);
-		        if(returnVal == JFileChooser.APPROVE_OPTION) {
-		        	filePath = Paths.get(chooser.getSelectedFile().getAbsolutePath());
-		        	try {
-						musicStringTxt = new String(Files.readString(filePath));
-						textAreaInput.setText(musicStringTxt);
-					} catch (IOException e) {
-						return;
-					}
-		        }	        
+				readFromTXT();	        
 			}
+
+			
 		});
 
 		mnNewMenu.add(mntmNewMenuItem);
@@ -213,24 +259,7 @@ public class GUI extends JFrame {
 		btnPlay.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if(!playThread.isAlive()) {
-					playThread = new Thread(new Runnable() {
-					    public void run() {
-					    	String mString = music.getMusicString(); 
-					    	if(!mString.isEmpty()) {
-					    		player.play(mString);
-					    	}
-					    	btnPlay.setIcon(playButton);
-					    	return;
-					    }
-					});
-					btnPlay.setIcon(stopButton);
-					playThread.start();
-				} else {
-					playThread.stop();
-					player.play("");
-					btnPlay.setIcon(playButton);
-				}
+				playResumeClicked(btnPlay);
 			}
 		});
 		btnPlay.setBackground(Color.BLACK);
@@ -244,14 +273,11 @@ public class GUI extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				music.generateInitialMusicString(currentVolume, currentBPM, 
-						currentInstrumentIndex);
-				
-				String inputText = textAreaInput.getText();
-				parser.buildMusicString(inputText);
-				textAreaOutput.setText(music.getMusicString());
+				generateMusicString(textAreaOutput);
 				
 			}
+
+			
 			
 		});
 		btnGenerate.setBounds(275, 288, 89, 33);
