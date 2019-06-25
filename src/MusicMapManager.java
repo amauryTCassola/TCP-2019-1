@@ -5,8 +5,8 @@ import java.util.List;
 
 public class MusicMapManager {
 	private Hashtable<String, MusicCommand> musicMap = new Hashtable<String, MusicCommand>();
-	private String lastMusicCommand = "";
-	private Character readDigit = '0';
+	private String lastMusicCommand = Constants.EMPTY_STRING;
+	private Character readDigit = Constants.ZERO_CHAR;
 
 
 	public MusicMapManager(){

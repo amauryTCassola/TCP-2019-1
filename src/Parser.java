@@ -14,7 +14,7 @@ public class Parser {
     }
 
     
-    public void iteratesThroughString(String inputText, int substringLength) {
+    private void iteratesThroughString(String inputText, int substringLength) {
     	
     	int lastIterableSubstringIndex = inputText.length() - (substringLength - 1);  
     	int startSubstring = 0;
